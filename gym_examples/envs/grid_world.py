@@ -1,14 +1,13 @@
 import gym
 from gym import spaces
-from gym.utils.renderer import Renderer
 import pygame
 import numpy as np
 
 
 class GridWorldEnv(gym.Env):
-    metadata = {"render_modes": ["human", "rgb_array", "single_rgb_array"], "render_fps": 4}
+    metadata = {"render_modes": ["human", "rgb_array"], "render_fps": 4}
 
-    def __init__(self, render_mode=None, size=5):
+    def __init__(self, size=5):
         self.size = size  # The size of the square grid
         self.window_size = 512  # The size of the PyGame window
 
@@ -35,10 +34,6 @@ class GridWorldEnv(gym.Env):
             2: np.array([-1, 0]),
             3: np.array([0, -1]),
         }
-
-        assert render_mode is None or render_mode in self.metadata["render_modes"]
-        self.render_mode = render_mode
-        self._renderer = Renderer(self.render_mode, self._render_frame)
 
         """
         If human-rendering is used, `self.window` will be a reference
@@ -74,10 +69,6 @@ class GridWorldEnv(gym.Env):
 
         observation = self._get_obs()
         info = self._get_info()
-
-        self._renderer.reset()
-        self._renderer.render_step()
-
         return (observation, info) if return_info else observation
 
     def step(self, action):
@@ -93,16 +84,9 @@ class GridWorldEnv(gym.Env):
         observation = self._get_obs()
         info = self._get_info()
 
-        self._renderer.render_step()
-
         return observation, reward, done, info
 
-    def render(self):
-        return self._renderer.get_renders()
-
-    def _render_frame(self, mode):
-        assert mode is not None
-
+    def render(self, mode="human"):
         if self.window is None and mode == "human":
             pygame.init()
             pygame.display.init()

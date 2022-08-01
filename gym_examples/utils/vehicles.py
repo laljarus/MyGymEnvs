@@ -68,14 +68,15 @@ class TruckTrailerKinematicsModel():
 
         self.R_truck = np.array([[np.cos(self.yaw_truck),-np.sin(self.yaw_truck),0],
                                  [np.sin(self.yaw_truck),np.cos(self.yaw_truck),0],
-                                 [0,0,1]])
+                                 [0,0,1]],dtype=np.float32)
 
         self.R_trailer = np.array([[np.cos(self.yaw_trailer),-np.sin(self.yaw_trailer),0],
                                  [np.sin(self.yaw_trailer),np.cos(self.yaw_trailer),0],
-                                 [0,0,1]])     
+                                 [0,0,1]],dtype=np.float32)     
         self.l_hitch = l_hitch
         self.l_trailer = l_trailer
-        self.x_trailer,self.y_trailer =  0
+        self.x_trailer = 0
+        self.y_trailer =  0
         self.tf_r_truck_to_trailer()
 
         self.trailer = BicycleModelKinematics(l_trailer/2,l_trailer/2,self.x_trailer,self.y_trailer,0,0,self.yaw_trailer,0)
@@ -85,18 +86,18 @@ class TruckTrailerKinematicsModel():
 
         self.R_truck = np.array([[np.cos(self.yaw_truck),-np.sin(self.yaw_truck),0],
                                  [np.sin(self.yaw_truck),np.cos(self.yaw_truck),0],
-                                 [0,0,1]])
+                                 [0,0,1]],dtype=np.float32)        
 
         self.R_trailer = np.array([[np.cos(self.yaw_trailer),-np.sin(self.yaw_trailer),0],
                                  [np.sin(self.yaw_trailer),np.cos(self.yaw_trailer),0],
-                                 [0,0,1]])
+                                 [0,0,1]],dtype=np.float32)                
 
         r_truck_wor = np.array([self.x_truck,self.y_truck,0])
         r_hitch_body = np.array([-self.l_hitch,0,0])
-        r_trailer_body = np.array([-self.l_trailer/2,0,0])
+        r_trailer_body = np.array([self.l_trailer/2,0,0])
 
         r_hitch_wor = r_truck_wor + np.dot(self.R_truck,r_hitch_body)
-        r_trailer_wor = r_hitch_wor + np.dot(self.R_trailer,r_trailer_wor)
+        r_trailer_wor = r_hitch_wor + np.dot(self.R_trailer,r_trailer_body)
 
 
         self.x_trailer = r_trailer_wor[0]
@@ -108,7 +109,7 @@ class TruckTrailerKinematicsModel():
 
         self.truck.update(LinearVelocity,SteeringAngle,dt)
 
-        steerAg_trailer = (self.last_yaw_truck - self.last_yaw_trailer)*180/np.pi
+        steerAg_trailer = 180 - ((self.last_yaw_trailer - self.last_yaw_truck)*180/np.pi)        
         steerAg_trailer = steerAg_trailer %360
 
         self.trailer.update(LinearVelocity,steerAg_trailer,dt)

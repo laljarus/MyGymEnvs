@@ -10,3 +10,8 @@ register(
     id= "gym_examples/MyGridWorld-v0",
     entry_point= "gym_examples.envs:MyGridWorldEnv",
 )
+
+register(
+    id= "gym_examples/TruckTrailerPark-v0",
+    entry_point = "gym_examples.envs:TruckTrailer_park",
+)
