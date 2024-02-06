@@ -4,7 +4,7 @@
 
 
 import gym
-from matplotlib import pyplot as plt
+#from matplotlib import pyplot as plt
 import gym_examples
 import pygame,sys
 from pygame.locals import *

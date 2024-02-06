@@ -56,7 +56,7 @@ class TruckTrailer_park(gym.Env):
         return {"agent": self._agent_location, "goal": self._goal_location}
 
     def _get_info(self):
-        return 0 
+        return {"agent": self._agent_location, "goal": self._goal_location} 
 
     def reset(self,return_info = False):
         self._agent_location = np.array([[0],[0],[0]])

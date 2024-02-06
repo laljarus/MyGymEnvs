@@ -49,7 +49,7 @@ class MyGridWorldEnv(gym.Env):
 
     def _get_info(self):
         return {
-            "distance": np.linalg.norm(
+             "distance": np.linalg.norm(
                 self._agent_location - self._target_location, ord=1
             )
         }
